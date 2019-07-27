@@ -26,33 +26,33 @@ class GANDrum(object):
 		
 	def make_generator_model():
 		model=tf.keras.Sequential()
-		
-		
+			
+			
 		model.add(layers.Dense(units=1024,input_shape=(100,)))
 		model.add(layers.BatchNormalization())
-		model.add(layers.softmax())
-		
-		models.add(Dense(units=512))
+		model.add(layers.LeakyReLU())
+			
+		model.add(layers.Dense(units=512))
 		model.add(layers.BatchNormalization())
-		model.add(layers.softmax())
+		model.add(layers.LeakyReLU())
 
 
 		model.add(layers.Reshape((1,2)))
 
 
-		model.add(layers.Conv2DTranspose(filter=1,kernel_size=2,strides=2))
+		model.add(layers.Conv2DTranspose(filters=1,kernel_size=2,strides=2))
 		model.add(layers.BatchNormalization())
-		model.add(layers.softmax())
-		
-		model.add(layers.Conv2DTranspose(filter=1,kernel_size=2,strides=2))
+		model.add(layers.LeakyReLU())
+			
+		model.add(layers.Conv2DTranspose(filters=1,kernel_size=2,strides=2))
 		model.add(layers.BatchNormalization())
-		model.add(layers.softmax())
-		
-		model.add(layers.Conv2DTranspose(filter=1,kernel_size=2,strides=2))
+		model.add(layers.LeakyReLU())
+			
+		model.add(layers.Conv2DTranspose(filters=1,kernel_size=2,strides=2))
 		model.add(layers.BatchNormalization())
-		model.add(layers.softmax())
+		model.add(layers.LeakyReLU())
 
-		model.add(layers.Conv2DTranspose(filter=128,kernel_size=1,strides=1,activation='tanh')
+		model.add(layers.Conv2DTranspose(filters=128,kernel_size=1,strides=1,activation='tanh'))
 		model.add(layers.BatchNormalization())
 		model.add(layers.softmax())
 
