@@ -24,20 +24,20 @@ class GANDrum(object):
 		
 		train_dataset=tf.data.Dataset.from_tensor_slices(self.train_files).shuffle(self.buffer_size).batch(self.batch_size)
 		
-	def make_generator_model():
+	def make_generator_model(self):
 		model=tf.keras.Sequential()
 			
 			
-		model.add(layers.Dense(units=1024,input_shape=(100,)))
+		model.add(layers.Dense(units=512,input_shape=(100,)))
 		model.add(layers.BatchNormalization())
 		model.add(layers.LeakyReLU())
 			
-		model.add(layers.Dense(units=512))
+		model.add(layers.Dense(units=256))
 		model.add(layers.BatchNormalization())
 		model.add(layers.LeakyReLU())
 
 
-		model.add(layers.Reshape((1,2)))
+		model.add(layers.Reshape((2,1,128)))
 
 
 		model.add(layers.Conv2DTranspose(filters=1,kernel_size=2,strides=2))
@@ -54,7 +54,24 @@ class GANDrum(object):
 
 		model.add(layers.Conv2DTranspose(filters=128,kernel_size=1,strides=1,activation='tanh'))
 		model.add(layers.BatchNormalization())
-		model.add(layers.softmax())
+		model.add(layers.Softmax())
+
+		return model
+	
+	def make_discriminator_model():
+		model=tf.keras.Sequential()
+		
+		
+		model.add(layers.Conv2D(64,(5,5),strides=(2,2),padding='same',input_shape=[28,28,1]))
+		model.add(layers.LeakyReLU())
+		model.add(layers.Dropout(0.3))
+
+		model.add(layers.Conv2D(128,(5,5),strides=(2,2),padding='same'))
+		model.add(layers.LeakyReLU())
+		model.add(layers.Dropout(0.3))
+
+		model.add(layers.Flatten())
+		model.add(layers.Dense(1))
 
 		return model
 	
