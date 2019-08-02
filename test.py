@@ -1,15 +1,41 @@
-import matplotlib.pyplot as plt
-from model import GANDrum
-import tensorflow as tf
+from scipy import sparse
+import pypianoroll as pp
+import numpy as np
+import os
 
-m=GANDrum()
+max=0
 
-generator = m.make_generator_model()
+entries=os.listdir(r'D:/midi_d/Electronic/')
+for entry in entries:
+	x=pp.parse(entry)
+	pp.save(r'D:\midi_d\your_training_data',x,compressed=False)
+	data=np.load(r'D:\midi_d\your_training_data.npz')
+	mtx=sparse.csc_matrix((data['pianoroll_0_csc_data'], data['pianoroll_0_csc_indices'], data['pianoroll_0_csc_indptr'])).todense()
+	if max<mtx.shape[0]:
+		max=mtx.shape[0]
+		print(max)
 
-noise = tf.random.normal([1, 100])
-generated_image = generator(noise, training=False)
+entries=os.listdir(r'D:/midi_d/FunkRnB/')
+for entry in entries:
+	x=pp.parse(entry)
+	pp.save(r'D:\midi_d\your_training_data',x,compressed=False)
+	data=np.load(r'D:\midi_d\your_training_data.npz')
+	mtx=sparse.csc_matrix((data['pianoroll_0_csc_data'], data['pianoroll_0_csc_indices'], data['pianoroll_0_csc_indptr'])).todense()
+	if max<mtx.shape[0]:
+		max=mtx.shape[0]
+		print(max)
 
-for item in generated_image:
-	print(item)
+entries=os.listdir(r'D:/midi_d/World/')
+for entry in entries:
+	x=pp.parse(entry)
+	pp.save(r'D:\midi_d\your_training_data',x,compressed=False)
+	data=np.load(r'D:\midi_d\your_training_data.npz')
+	mtx=sparse.csc_matrix((data['pianoroll_0_csc_data'], data['pianoroll_0_csc_indices'], data['pianoroll_0_csc_indptr'])).todense()
+	if max<mtx.shape[0]:
+		max=mtx.shape[0]
+		print(max)
+		
+
+
 
 
