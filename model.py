@@ -29,18 +29,53 @@ class GANDrum(object):
 		
 		
 	def load_data():
-		entries= s.listdir(r'D:/midi_d/')
+		entries=os.listdir(r'D:/midi_d/')
 		for entry in entries:
 			x=pp.parse(entry)
 			pp.save(r'D:\midi_d\your_training_data',x,compressed=False)
 			data=np.load(r'D:\midi_d\your_training_data.npz')
 			mtx=sparse.csc_matrix((data['pianoroll_0_csc_data'], data['pianoroll_0_csc_indices'], data['pianoroll_0_csc_indptr']), shape=(1536, 128)).todense()
 			self.train_files.append(mtx)
+		self.train_files=self.train_files.reshape(train_files.shape[0],16,96,128)
 		
 		self.train_labels=np.load(r'D:\midi_d_label\labels.npy')
 		
 		self.train_dataset=tf.data.Dataset.from_tensor_slices(self.train_files).shuffle(self.buffer_size).batch(self.batch_size)
-		
+	'''
+	def make_generator_model(self):
+		model=tf.keras.Sequential()
+			
+			
+		model.add(layers.Dense(units=512,input_shape=(100,)))
+		model.add(layers.BatchNormalization())
+		model.add(layers.LeakyReLU())
+			
+		model.add(layers.Dense(units=256))
+		model.add(layers.BatchNormalization())
+		model.add(layers.LeakyReLU())
+
+
+		model.add(layers.Reshape((2,1,128)))
+
+
+		model.add(layers.Conv2DTranspose(filters=1,kernel_size=2,strides=2))
+		model.add(layers.BatchNormalization())
+		model.add(layers.LeakyReLU())
+			
+		model.add(layers.Conv2DTranspose(filters=1,kernel_size=2,strides=2))
+		model.add(layers.BatchNormalization())
+		model.add(layers.LeakyReLU())
+			
+		model.add(layers.Conv2DTranspose(filters=1,kernel_size=2,strides=2))
+		model.add(layers.BatchNormalization())
+		model.add(layers.LeakyReLU())
+
+		model.add(layers.Conv2DTranspose(filters=128,kernel_size=1,strides=1,activation='tanh'))
+		model.add(layers.BatchNormalization())
+		model.add(layers.Softmax())
+
+		return model
+	'''
 	def make_generator_model(self):
 		model=tf.keras.Sequential()
 			
@@ -78,8 +113,8 @@ class GANDrum(object):
 	def make_discriminator_model(self):
 		model=tf.keras.Sequential()
 		
-		
-		model.add(layers.Conv2D(filters=128,kernel_size=1,strides=1,input_shape=[16,8,128]))
+		#model.add(layers.Conv2D(filters=128,kernel_size=1,strides=1,input_shape=[16,8,128]))
+		model.add(layers.Conv2D(filters=128,kernel_size=1,strides=1,input_shape=[16,96,128]))
 		model.add(layers.LeakyReLU())
 
 		model.add(layers.Conv2D(filters=1,kernel_size=2,strides=2))
