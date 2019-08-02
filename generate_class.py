@@ -1,10 +1,16 @@
 import numpy as np
 
-labels = ['contemporary','dance','ethnic','three/four','folk','jazz','latin','rock']
 y = []
-for name in labels:
-	for i in range(0,10):
-		y.append(name)
+
+for i in range(0,1089):
+	y.append('Electronic')
+
+for i in range(0,656):
+	y.append('Funk')
+
+for i in range(0,926):
+	y.append('World')
+	
 mat = np.array(y)
 
 np.save('D:\midi_d_label\labels',mat)
